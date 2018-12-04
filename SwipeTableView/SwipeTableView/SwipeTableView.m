@@ -159,10 +159,18 @@ static void * SwipeTableViewItemPanGestureContext      = &SwipeTableViewItemPanG
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    self.contentView.frame = self.bounds;
-    self.layout.itemSize = self.bounds.size;
     self.swipeHeaderBarScrollDisabled &= nil == _swipeHeaderView;
     self.swipeHeaderBar.st_top = _swipeHeaderView.st_bottom;
+    CGRect bounds = self.bounds;
+    CGRect newBounds = CGRectZero;
+    if (_swipeHeaderBarResetScrollViewFrame) {
+        CGFloat height = self.swipeHeaderBar.st_height;
+        newBounds = CGRectMake(0, height, bounds.size.width, bounds.size.height-height);
+    }else{
+        newBounds = bounds;
+    }
+    self.contentView.frame = newBounds;
+    self.layout.itemSize = newBounds.size;
     if (_swipeHeaderBarScrollDisabled) {
         _swipeHeaderBar.st_top = _swipeHeaderTopInset;
     }
@@ -199,7 +207,11 @@ static void * SwipeTableViewItemPanGestureContext      = &SwipeTableViewItemPanG
         
         _swipeHeaderBar       = swipeHeaderBar;
         _swipeHeaderBar.st_y += _swipeHeaderTopInset;
-        _barInset             = _swipeHeaderBar.bounds.size.height;
+        if (_swipeHeaderBarResetScrollViewFrame) {
+            _barInset             = 0;
+        }else{
+            _barInset             = _swipeHeaderBar.bounds.size.height;
+        }
         
         [self reloadData];
         [self layoutIfNeeded];

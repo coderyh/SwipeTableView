@@ -71,7 +71,10 @@
 @property (nonatomic, assign) BOOL swipeHeaderBarScrollDisabled;
 
 @property (nonatomic, assign) BOOL scrollEnabled;
-
+/**
+ *  设置swipeHeaderBar的时候是否会重新设置scrollview的frame,默认为 NO。如果设置为YES,tableView的frame会变小,swipeHeaderBar不会影响tableView的sectionHeader
+ */
+@property (nonatomic, assign) BOOL swipeHeaderBarResetScrollViewFrame;
 
 - (void)reloadData;
 - (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated;
