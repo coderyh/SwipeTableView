@@ -76,6 +76,7 @@
  */
 @property (nonatomic, assign) BOOL swipeHeaderBarResetScrollViewFrame;
 
+- (void)forceReloadSwipeHeaderView:(UIView *)newHeaderView;
 - (void)reloadData;
 - (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 

@@ -181,22 +181,26 @@ static void * SwipeTableViewItemPanGestureContext      = &SwipeTableViewItemPanG
     [self reloadData];
 }
 
+- (void)forceReloadSwipeHeaderView:(UIView *)newHeaderView {
+    [_swipeHeaderView removeFromSuperview];
+    [self addSubview:newHeaderView];
+    
+    _swipeHeaderView       = newHeaderView;
+    _swipeHeaderView.st_y += _swipeHeaderTopInset;
+    _headerInset           = _swipeHeaderView.bounds.size.height;
+    
+    BOOL isSTHeaderView = [newHeaderView isKindOfClass:STHeaderView.class];
+    if (isSTHeaderView) {
+        [(STHeaderView *)newHeaderView setDelegate:self];
+    }
+    
+    [self reloadData];
+    [self layoutIfNeeded];
+}
+
 - (void)setSwipeHeaderView:(UIView *)swipeHeaderView {
     if (_swipeHeaderView != swipeHeaderView) {
-        [_swipeHeaderView removeFromSuperview];
-        [self addSubview:swipeHeaderView];
-        
-        _swipeHeaderView       = swipeHeaderView;
-        _swipeHeaderView.st_y += _swipeHeaderTopInset;
-        _headerInset           = _swipeHeaderView.bounds.size.height;
-        
-        BOOL isSTHeaderView = [swipeHeaderView isKindOfClass:STHeaderView.class];
-        if (isSTHeaderView) {
-            [(STHeaderView *)swipeHeaderView setDelegate:self];
-        }
-
-        [self reloadData];
-        [self layoutIfNeeded];
+        [self forceReloadSwipeHeaderView:swipeHeaderView];
     }
 }
 
